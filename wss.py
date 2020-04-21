@@ -10,8 +10,8 @@ SUBSCRIPTION_NAME = "Push2Run LENOVO-TIM"
 
 
 def on_message(ws, message):
-    print("message")
-    print(message)
+    # print("message")
+    # print(message)
     content = json.loads(message)
     sub = content.get("subtype")
     if sub == "push":
@@ -47,7 +47,7 @@ def process_command(command):
 
 
 def on_error(ws, error):
-    print("error")
+    # print("error")
     print(error)
 
 
@@ -56,7 +56,8 @@ def on_close(ws):
 
 
 def on_open(ws):
-    print("open")
+    pass
+    # print("open")
 
 
 if __name__ == "__main__":
