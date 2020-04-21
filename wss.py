@@ -6,6 +6,7 @@ import websocket
 import time
 import subprocess
 import sys
+import ctypes
 
 SUBSCRIPTION_NAME = "Push2Run LENOVO-TIM"
 recent_time = time.time()
@@ -68,6 +69,21 @@ def process_command(command):
             subprocess.run(["shutdown", "/s", "/t", "0"])
         elif sys.platform == "linux":
             subprocess.run(["systemctl", "suspend"])
+    elif command == "open vnc":
+        if sys.platform == "win32":
+            if ctypes.windll.shell32.IsUserAnAdmin() != 0:
+                subprocess.run(
+                    [
+                        "C:",
+                        "&&",
+                        "cd",
+                        "C:\Program Files\RealVNC\VNC Server\\",
+                        "&&",
+                        "vncserver.exe",
+                        "-start",
+                    ],
+                    shell=True,
+                )
 
 
 def on_error(ws, error):
