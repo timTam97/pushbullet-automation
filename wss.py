@@ -1,9 +1,8 @@
-from api_key import get_key
+from api_key import key
 import requests
 import json
 import time
 import websocket
-import time
 import subprocess
 import sys
 import ctypes
@@ -14,8 +13,6 @@ recent_time = time.time()
 
 def on_message(ws, message):
     global recent_time
-    # print("message")
-    # print(message)
     content = json.loads(message)
     sub = content.get("subtype")
     if sub == "push":
@@ -33,7 +30,7 @@ def on_message(ws, message):
 def grab_push():
     url = "https://api.pushbullet.com/v2/pushes"
     headers = {
-        "Access-Token": get_key(),
+        "Access-Token": key(),
     }
     # fmt: off
     params = {
@@ -53,19 +50,16 @@ def grab_push():
 def process_command(command):
     if command == "sleep":
         if sys.platform == "win32":
-            # print("sleep")
             subprocess.run(["psshutdown", "-d", "-t", "0"])
         elif sys.platform == "linux":
             subprocess.run(["systemctl", "suspend"])
     elif command == "hibernate":
         if sys.platform == "win32":
-            # print("hibernate")
             subprocess.run(["psshutdown", "-h", "-t", "0"])
         elif sys.platform == "linux":
             pass  # idk how to hibernate on linux
     elif command == "shut down":
         if sys.platform == "win32":
-            # print("sdwn")
             subprocess.run(["shutdown", "/s", "/t", "0"])
         elif sys.platform == "linux":
             subprocess.run(["systemctl", "suspend"])
@@ -87,7 +81,6 @@ def process_command(command):
 
 
 def on_error(ws, error):
-    # print("error")
     print(error)
 
 
@@ -97,16 +90,19 @@ def on_close(ws):
 
 def on_open(ws):
     pass
-    # print("open")
 
 
-if __name__ == "__main__":
+def main():
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
-        "wss://stream.pushbullet.com/websocket/" + get_key(),
+        "wss://stream.pushbullet.com/websocket/" + key(),
         on_message=on_message,
         on_error=on_error,
         on_close=on_close,
     )
     ws.on_open = on_open
     ws.run_forever()
+
+
+if __name__ == "__main__":
+    main()
