@@ -4,3 +4,5 @@ api_key.py
 __pycache__/
 
 .vscode/
+
+testing.py
