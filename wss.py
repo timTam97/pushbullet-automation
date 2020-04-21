@@ -5,11 +5,14 @@ import time
 import websocket
 import time
 import subprocess
+import sys
 
 SUBSCRIPTION_NAME = "Push2Run LENOVO-TIM"
+recent_time = time.time()
 
 
 def on_message(ws, message):
+    global recent_time
     # print("message")
     # print(message)
     content = json.loads(message)
@@ -18,7 +21,11 @@ def on_message(ws, message):
         response = grab_push()
         title = response[0]
         body = response[1]
-        if title == SUBSCRIPTION_NAME and body is not None:
+        time = response[2]
+        dismissed = response[3]
+
+        if title == SUBSCRIPTION_NAME and body is not None and not dismissed:
+            recent_time = time
             process_command(body)
 
 
@@ -30,20 +37,37 @@ def grab_push():
     # fmt: off
     params = {
         "active": "true", 
-        "modified_after": int(time.time()) - 10
+        "modified_after": recent_time
     }
     # fmt: on
     r = requests.get(url, headers=headers, params=params).json()
-    return r.get("pushes")[0].get("title"), r.get("pushes")[0].get("body")
+    return (
+        r.get("pushes")[0].get("title"),
+        r.get("pushes")[0].get("body"),
+        r.get("pushes")[0].get("modified"),
+        r.get("pushes")[0].get("dismissed"),
+    )
 
 
 def process_command(command):
     if command == "sleep":
-        subprocess.run(["systemctl", "suspend"])
+        if sys.platform == "win32":
+            # print("sleep")
+            subprocess.run(["psshutdown", "-d", "-t", "0"])
+        elif sys.platform == "linux":
+            subprocess.run(["systemctl", "suspend"])
     elif command == "hibernate":
-        pass  # idk how to hibernate on linux
+        if sys.platform == "win32":
+            # print("hibernate")
+            subprocess.run(["psshutdown", "-h", "-t", "0"])
+        elif sys.platform == "linux":
+            pass  # idk how to hibernate on linux
     elif command == "shut down":
-        subprocess.run(["poweroff"])  # untested
+        if sys.platform == "win32":
+            # print("sdwn")
+            subprocess.run(["shutdown", "/s", "/t", "0"])
+        elif sys.platform == "linux":
+            subprocess.run(["systemctl", "suspend"])
 
 
 def on_error(ws, error):
