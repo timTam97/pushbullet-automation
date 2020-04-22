@@ -1,12 +1,17 @@
 import ctypes
 import sys
-import wss
+import web
 
-if __name__ == "__main__":
+
+def main():
     if ctypes.windll.shell32.IsUserAnAdmin() != 0:
-        wss.main()
+        web.main()
     else:
         # Re-run the program with admin rights
         ctypes.windll.shell32.ShellExecuteW(
             None, "runas", sys.executable, " ".join(sys.argv), None, 1
         )
+
+
+if __name__ == "__main__":
+    main()

@@ -4,9 +4,6 @@ import requests
 import json
 import time
 import websocket
-import subprocess
-import sys
-import ctypes
 
 SUBSCRIPTION_NAME = "Push2Run LENOVO-TIM"
 recent_time = time.time()
