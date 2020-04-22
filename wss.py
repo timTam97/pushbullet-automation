@@ -1,4 +1,5 @@
 from api_key import key
+import actions
 import requests
 import json
 import time
@@ -49,35 +50,15 @@ def grab_push():
 
 def process_command(command):
     if command == "sleep":
-        if sys.platform == "win32":
-            subprocess.run(["psshutdown", "-d", "-t", "0"])
-        elif sys.platform == "linux":
-            subprocess.run(["systemctl", "suspend"])
+        actions.sleep()
     elif command == "hibernate":
-        if sys.platform == "win32":
-            subprocess.run(["psshutdown", "-h", "-t", "0"])
-        elif sys.platform == "linux":
-            pass  # idk how to hibernate on linux
+        actions.hibernate()
     elif command == "shut down":
-        if sys.platform == "win32":
-            subprocess.run(["shutdown", "/s", "/t", "0"])
-        elif sys.platform == "linux":
-            subprocess.run(["systemctl", "suspend"])
+        actions.shut_down()
     elif command == "open vnc":
-        if sys.platform == "win32":
-            if ctypes.windll.shell32.IsUserAnAdmin() != 0:
-                subprocess.run(
-                    [
-                        "C:",
-                        "&&",
-                        "cd",
-                        "C:\Program Files\RealVNC\VNC Server\\",
-                        "&&",
-                        "vncserver.exe",
-                        "-start",
-                    ],
-                    shell=True,
-                )
+        actions.open_vnc()
+    elif command == "lock":
+        actions.lock()
 
 
 def on_error(ws, error):
