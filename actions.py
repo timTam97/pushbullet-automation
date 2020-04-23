@@ -7,7 +7,7 @@ def hibernate():
     if sys.platform == "win32":
         subprocess.run(["psshutdown", "-h", "-t", "0"])
     elif sys.platform == "linux":
-        pass  # idk how to hibernate on linux
+        subprocess.run(["systemctl", "hibernate"])  # untested
 
 
 def sleep():
@@ -21,7 +21,7 @@ def shut_down():
     if sys.platform == "win32":
         subprocess.run(["shutdown", "/s", "/t", "0"])
     elif sys.platform == "linux":
-        subprocess.run(["systemctl", "suspend"])
+        subprocess.run(["systemctl", "poweroff"])  # untested
 
 
 def open_vnc():
@@ -45,4 +45,4 @@ def lock():
     if sys.platform == "win32":
         ctypes.windll.user32.LockWorkStation()
     elif sys.platform == "linux":
-        pass  # TODO
+        subprocess.run(["gnome-screensaver-command", "-l"])
