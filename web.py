@@ -5,7 +5,7 @@ import json
 import time
 import websocket
 
-SUBSCRIPTION_NAME = "Push2Run LENOVO-TIM"
+SUBSCRIPTION_NAME = "LENOVO-TIM"
 recent_time = time.time()
 
 
@@ -19,8 +19,14 @@ def on_message(ws, message):
         body = response[1]
         time = response[2]
         dismissed = response[3]
+        sender = response[4]
 
-        if title == SUBSCRIPTION_NAME and body is not None and not dismissed:
+        if (
+            title == SUBSCRIPTION_NAME
+            and body is not None
+            and not dismissed
+            and sender == "IFTTT"
+        ):
             recent_time = time
             process_command(body)
 
@@ -42,6 +48,7 @@ def grab_push():
         r.get("pushes")[0].get("body"),
         r.get("pushes")[0].get("modified"),
         r.get("pushes")[0].get("dismissed"),
+        r.get("pushes")[0].get("sender_name"),
     )
 
 
