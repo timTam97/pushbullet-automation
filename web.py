@@ -27,6 +27,7 @@ def on_message(ws, message):
             and not dismissed
             and sender == "IFTTT"
         ):
+            actions.write_log("command: " + body)
             recent_time = time
             process_command(body)
 
@@ -67,14 +68,15 @@ def process_command(command):
 
 def on_error(ws, error):
     print(error)
+    actions.write_log(str(error))
 
 
 def on_close(ws):
-    print("closed.")
+    actions.write_log("closed")
 
 
 def on_open(ws):
-    pass
+    actions.write_log("opened")
 
 
 def main():

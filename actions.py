@@ -1,6 +1,7 @@
 import ctypes
 import sys
 import subprocess
+import datetime
 
 
 def hibernate():
@@ -39,6 +40,13 @@ def open_vnc():
                 ],
                 shell=True,
             )
+
+
+def write_log(event):
+    with open("run.log", "a") as f:
+        to_write = "[" + str(datetime.datetime.today()) + "] "
+        to_write += event + "\n"
+        f.write(to_write)
 
 
 def lock():
