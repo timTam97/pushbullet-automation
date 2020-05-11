@@ -62,7 +62,7 @@ def get_comp_name():
         size = ctypes.byref(ctypes.c_int(len(strbuf)))
         # username: Advapi32.GetUserNameW
         if ctypes.windll.kernel32.GetComputerNameW(strbuf, size) == 0:
-            return ""
+            raise RuntimeError("GetComputerName failed")
         return strbuf.value
     elif sys.platform == "linux":
         return (
