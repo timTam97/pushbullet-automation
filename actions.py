@@ -6,16 +6,14 @@ import datetime
 
 def hibernate():
     if sys.platform == "win32":
-        # ctypes.windll.PowrProf.SetSuspendState(True, False, False)
-        subprocess.run(["psshutdown", "-h", "-t", "0"])
+        ctypes.windll.PowrProf.SetSuspendState(True, False, False)
     elif sys.platform == "linux":
         subprocess.run(["systemctl", "hibernate"])  # untested
 
 
 def sleep():
     if sys.platform == "win32":
-        # ctypes.windll.PowrProf.SetSuspendState(False, False, False)
-        subprocess.run(["psshutdown", "-d", "-t", "0"])
+        ctypes.windll.PowrProf.SetSuspendState(False, False, False)
     elif sys.platform == "linux":
         subprocess.run(["systemctl", "suspend"])
 
@@ -60,7 +58,7 @@ def lock():
 
 def get_comp_name():
     if sys.platform == "win32":
-        strbuf = ctypes.create_unicode_buffer(50)
+        strbuf = ctypes.create_unicode_buffer(16)
         size = ctypes.byref(ctypes.c_int(len(strbuf)))
         # username: Advapi32.GetUserNameW
         if ctypes.windll.kernel32.GetComputerNameW(strbuf, size) == 0:
