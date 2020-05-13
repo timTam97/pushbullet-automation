@@ -80,6 +80,7 @@ def on_open(ws):
 
 
 def main():
+    actions.write_log("web.py main")
     websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
         "wss://stream.pushbullet.com/websocket/" + key(),

@@ -2,9 +2,11 @@ import ctypes
 import sys
 import web
 import time
+import actions
 
 
 def main():
+    actions.write_log("run.pyw main")
     if sys.platform == "win32":
         if ctypes.windll.shell32.IsUserAnAdmin() != 0:
             while True:
