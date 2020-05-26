@@ -7,8 +7,6 @@ import datetime
 def hibernate():
     if sys.platform == "win32":
         ctypes.windll.PowrProf.SetSuspendState(True, False, False)
-    elif sys.platform == "linux":
-        subprocess.run(["systemctl", "hibernate"])  # untested
 
 
 def sleep():
@@ -45,7 +43,7 @@ def open_vnc():
 def write_log(event):
     with open("run.log", "a") as f:
         to_write = "[" + str(datetime.datetime.today())[:-7] + "] "
-        to_write += event + "\n"
+        to_write += str(event) + "\n"
         f.write(to_write)
 
 

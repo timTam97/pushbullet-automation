@@ -1,11 +1,10 @@
-from api_key import key
+import auth
 import actions
 import requests
 import json
 import time
 import websocket
 
-SUBSCRIPTION_NAME = "LENOVO-TIM"
 recent_time = time.time()
 
 
@@ -16,7 +15,7 @@ def on_message(ws, message):
     if sub == "push":
         title, body, time, dismissed, sender = grab_push()
         if (
-            title == SUBSCRIPTION_NAME
+            title == auth.SUBSCRIPTION_NAME
             and body is not None
             and not dismissed
             and sender == "IFTTT"
@@ -29,7 +28,7 @@ def on_message(ws, message):
 def grab_push():
     url = "https://api.pushbullet.com/v2/pushes"
     headers = {
-        "Access-Token": key(),
+        "Access-Token": auth.key(),
     }
     # fmt: off
     params = {
@@ -74,9 +73,8 @@ def on_open(ws):
 
 def main():
     actions.write_log("web.py main")
-    websocket.enableTrace(True)
     ws = websocket.WebSocketApp(
-        "wss://stream.pushbullet.com/websocket/" + key(),
+        "wss://stream.pushbullet.com/websocket/" + auth.key(),
         on_message=on_message,
         on_error=on_error,
         on_close=on_close,
