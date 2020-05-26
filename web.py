@@ -14,13 +14,7 @@ def on_message(ws, message):
     content = json.loads(message)
     sub = content.get("subtype")
     if sub == "push":
-        response = grab_push()
-        title = response[0]
-        body = response[1]
-        time = response[2]
-        dismissed = response[3]
-        sender = response[4]
-
+        title, body, time, dismissed, sender = grab_push()
         if (
             title == SUBSCRIPTION_NAME
             and body is not None
@@ -67,7 +61,6 @@ def process_command(command):
 
 
 def on_error(ws, error):
-    print(error)
     actions.write_log(str(error))
 
 
