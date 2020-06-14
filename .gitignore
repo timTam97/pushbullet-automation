@@ -7,3 +7,5 @@ test*.py
 *.log
 
 auth.py
+
+.idea/
