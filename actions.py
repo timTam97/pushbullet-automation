@@ -31,7 +31,7 @@ def open_vnc():
                     "C:",
                     "&&",
                     "cd",
-                    "C:\Program Files\RealVNC\VNC Server\\",
+                    "C:\\Program Files\\RealVNC\\VNC Server\\",
                     "&&",
                     "vncserver.exe",
                     "-start",

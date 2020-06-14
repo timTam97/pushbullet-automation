@@ -13,7 +13,7 @@ def on_message(ws, message):
     content = json.loads(message)
     sub = content.get("subtype")
     if sub == "push":
-        title, body, time, dismissed, sender = grab_push()
+        title, body, time_inbound, dismissed, sender = grab_push()
         if (
             title == auth.SUBSCRIPTION_NAME
             and body is not None
@@ -21,7 +21,7 @@ def on_message(ws, message):
             and sender == "IFTTT"
         ):
             actions.write_log("command: " + body)
-            recent_time = time
+            recent_time = time_inbound
             process_command(body)
 
 
