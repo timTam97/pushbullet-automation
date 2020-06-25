@@ -68,21 +68,3 @@ def get_comp_name():
             .stdout.decode()
             .rstrip()
         )
-
-
-def check_pythonw():
-    if sys.platform == "win32":
-        proc = subprocess.Popen(
-            'tasklist | findstr "pythonw.exe"', shell=True, stdout=subprocess.PIPE,
-        )
-        if "pythonw.exe" in proc.communicate()[0].decode("ascii"):
-            ctypes.windll.User32.MessageBoxW(
-                None,
-                "Pushbullet Automation is already running",
-                None,
-                0x00000000 | 0x00000030,
-            )
-            return True
-        return False
-    elif sys.platform == "linux":
-        return False  # TODO
