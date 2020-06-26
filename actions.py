@@ -4,6 +4,7 @@ import dateutil.parser
 import sys
 import subprocess
 import time
+import tkinter.messagebox
 
 
 def hibernate():
@@ -98,4 +99,19 @@ def check_pythonw():
                 return True
         return False
     elif sys.platform == "linux":
-        return False  # TODO
+        res = (
+            subprocess.run(["pgrep", "-af", "run.pyw"], stdout=subprocess.PIPE)
+            .stdout.decode()
+            .rstrip()
+        )
+        if res.count("run.pyw") > 1:
+            tkinter.Tk().withdraw()
+            tkinter.messagebox.showwarning(
+                "Error", "Pushbullet Automation is already running"
+            )
+            return True
+        return False
+
+
+if __name__ == "__main__":
+    check_pythonw()
