@@ -1,7 +1,9 @@
 import ctypes
+import datetime
+import dateutil.parser
 import sys
 import subprocess
-import datetime
+import time
 
 
 def hibernate():
@@ -68,3 +70,32 @@ def get_comp_name():
             .stdout.decode()
             .rstrip()
         )
+
+
+def grab_date(text):
+    res = text.partition("\n")[0].strip()[:-24]
+    datestring = res[:8] + "T" + res[8:]
+    return dateutil.parser.isoparse(datestring)
+
+
+def check_pythonw():
+    if sys.platform == "win32":
+        proc = subprocess.Popen(
+            'WMIC PROCESS GET NAME, CREATIONDATE | findstr "pythonw.exe"',
+            shell=True,
+            stdout=subprocess.PIPE,
+        )
+        res = proc.communicate()[0].decode("ascii")
+        if "pythonw.exe" in res:
+            date = grab_date(res)
+            if time.time() - date.timestamp() > 10:
+                ctypes.windll.User32.MessageBoxW(
+                    None,
+                    "Pushbullet Automation is already running",
+                    None,
+                    0x00000000 | 0x00000030,
+                )
+                return True
+        return False
+    elif sys.platform == "linux":
+        return False  # TODO
