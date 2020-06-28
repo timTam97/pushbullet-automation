@@ -1,6 +1,3 @@
-import auth
-import actions
-import requests
 import json
 import time
 
@@ -58,7 +55,7 @@ def process_command(command):
         actions.hibernate()
     elif command == "shut down":
         actions.shut_down()
-    elif command == "open vnc":
+    elif command.lower == "open vnc":
         actions.open_vnc()
     elif command == "lock":
         actions.lock()

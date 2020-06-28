@@ -1,7 +1,6 @@
 import ctypes
 import datetime
 import os
-import sys
 import subprocess
 import sys
 import time
@@ -43,6 +42,11 @@ def open_vnc():
                     "-start",
                 ],
                 shell=True,
+            )
+    elif sys.platform == "linux":
+        if os.geteuid() == 0:
+            subprocess.run(
+                ["systemctl", "start", "vncserver-x11-serviced.service"], shell=True
             )
 
 
