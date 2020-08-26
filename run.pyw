@@ -1,6 +1,5 @@
 import ctypes
 import sys
-import web
 import time
 
 import actions
