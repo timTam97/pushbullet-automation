@@ -9,7 +9,7 @@ import web
 def main():
     if actions.check_pythonw():
         raise RuntimeError("Program already running")
-    actions.write_log("run.pyw main")
+    actions.write_log("[EXEC] run.pyw main")
     if sys.platform == "win32":
         if ctypes.windll.shell32.IsUserAnAdmin() != 0:
             while True:

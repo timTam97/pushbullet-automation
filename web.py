@@ -22,7 +22,7 @@ def on_message(ws, message):
             and not dismissed
             and sender == "IFTTT"
         ):
-            actions.write_log("command: " + body)
+            actions.write_log("[INFO] command: " + body)
             recent_time = time_inbound
             process_command(body)
 
@@ -62,19 +62,19 @@ def process_command(command):
 
 
 def on_error(ws, error):
-    actions.write_log(str(error))
+    actions.write_log("[EXCEPTION] " + str(error))
 
 
 def on_close(ws):
-    actions.write_log("closed")
+    actions.write_log("[INFO] closed")
 
 
 def on_open(ws):
-    actions.write_log("opened")
+    actions.write_log("[INFO] opened")
 
 
 def main():
-    actions.write_log("web.py main")
+    actions.write_log("[EXEC] web.py main")
     ws = websocket.WebSocketApp(
         "wss://stream.pushbullet.com/websocket/" + auth.key(),
         on_message=on_message,
