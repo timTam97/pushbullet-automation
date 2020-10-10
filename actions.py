@@ -52,7 +52,7 @@ def open_vnc():
 
 def write_log(event):
     with open("run.log", "a") as f:
-        to_write = "[" + str(datetime.datetime.today())[:-7] + "] "
+        to_write = "[" + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + "] "
         to_write += str(event) + "\n"
         f.write(to_write)
 
