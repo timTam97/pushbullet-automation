@@ -20,7 +20,6 @@ def on_message(ws, message):
             title == auth.SUBSCRIPTION_NAME
             and body is not None
             and not dismissed
-            and (sender == "IFTTT" or sender == "Pushbullet Automation")
         ):
             actions.write_log("[INFO] command: " + body)
             recent_time = time_inbound
